@@ -1,36 +1,27 @@
 <?php 
-
-    //Include constants.php file here
+    //Bao gồm tệp constants.php ở đây
     include('../config/constants.php');
-
-    // 1. get the ID of Admin to be deleted
+    // 1. Lấy ID của Admin cần xóa
     $id = $_GET['id'];
-
-    //2. Create SQL Query to Delete Admin
+    //2. Tạo truy vấn SQL để xóa Admin
     $sql = "DELETE FROM tbl_admin WHERE id=$id";
-
-    //Execute the Query
+    //Thực hiện truy vấn
     $res = mysqli_query($conn, $sql);
-
-    // Check whether the query executed successfully or not
+    //Kiểm tra xem truy vấn có được thực hiện thành công hay không
     if($res==true)
     {
-        //Query Executed Successully and Admin Deleted
-        //echo "Admin Deleted";
-        //Create SEssion Variable to Display Message
-        $_SESSION['delete'] = "<div class='success'>Admin Deleted Successfully.</div>";
-        //Redirect to Manage Admin Page
+        //Truy vấn được thực hiện thành công và quản trị viên đã xóa
+        //echo "Đã xóa Admin thành công!";
+        //Tạo biến Session để hiển thị thông báo
+        $_SESSION['delete'] = "<div class='success'>Đã xóa Admin thành công!.</div>";
+        //Chuyển hướng đến trang quản lý Admin
         header('location:'.SITEURL.'admin/manage-admin.php');
     }
     else
     {
-        //Failed to Delete Admin
-        //echo "Failed to Delete Admin";
-
-        $_SESSION['delete'] = "<div class='error'>Failed to Delete Admin. Try Again Later.</div>";
+        //Không xóa được Admin và echo ra thông báo
+        $_SESSION['delete'] = "<div class='error'>Lỗi khi xóa Admin. Vui lòng kiểm tra lại!</div>";
         header('location:'.SITEURL.'admin/manage-admin.php');
     }
-
-    //3. Redirect to Manage Admin page with message (success/error)
-
+    //3. Chuyển hướng đến trang quản lý Admin với thông báo thành công hoặ lỗi
 ?>

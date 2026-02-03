@@ -1,65 +1,55 @@
 <?php 
-    //Include Constants File
+    //Bao gồm file Constants
     include('../config/constants.php');
-
-    //echo "Delete Page";
-    //Check whether the id and image_name value is set or not
+    //echo "Xóa trang";
+    //Kiểm tra xem giá trị Id và image_name đã được đặt hay chưa
     if(isset($_GET['id']) AND isset($_GET['image_name']))
     {
-        //Get the Value and Delete
-        //echo "Get Value and Delete";
+        //Lấy giá trị và xóa
+        //echo "Lấy giá trị và xóa";
         $id = $_GET['id'];
         $image_name = $_GET['image_name'];
-
-        //Remove the physical image file is available
+        //Xóa tệp hình ảnh
         if($image_name != "")
         {
-            //Image is Available. So remove it
+            //Hình ảnh có sẵn và hãy xóa nó
             $path = "../images/category/".$image_name;
-            //REmove the Image
+            //Xóa hình ảnh
             $remove = unlink($path);
-
-            //IF failed to remove image then add an error message and stop the process
+            //Nếu không xóa được hình ảnh thì hãy thêm thông báo lỗi và dừng quá trình
             if($remove==false)
             {
-                //Set the SEssion Message
-                $_SESSION['remove'] = "<div class='error'>Failed to Remove Category Image.</div>";
-                //REdirect to Manage Category page
+                //Đặt thông báo Session
+                $_SESSION['remove'] = "<div class='error'>Lỗi khi xóa hình ảnh danh mục. Vui lòng kiểm tra lại!</div>";
+                //Chuyển hướng đến trang quản lý danh mục
                 header('location:'.SITEURL.'admin/manage-category.php');
-                //Stop the Process
+                //Kết thúc tiến trình
                 die();
             }
         }
-
-        //Delete Data from Database
-        //SQL Query to Delete Data from Database
+        //Truy vấn SQL để xóa dữ liệu khỏi cơ sở dữ liệu
         $sql = "DELETE FROM tbl_category WHERE id=$id";
-
-        //Execute the Query
+        //Thực hiện truy vấn
         $res = mysqli_query($conn, $sql);
-
-        //Check whether the data is delete from database or not
+        //Kiểm tra xem dữ liệu có bị xóa khỏi cơ sở dữ liệu hay không
         if($res==true)
         {
-            //SEt Success MEssage and REdirect
-            $_SESSION['delete'] = "<div class='success'>Category Deleted Successfully.</div>";
-            //Redirect to Manage Category
+            //Thiết lập thông báo thành công và chuyển hướng
+            $_SESSION['delete'] = "<div class='success'>Xóa danh mục thành công!</div>";
+            //Chuyển hướng đến quản lý danh mục
             header('location:'.SITEURL.'admin/manage-category.php');
         }
         else
         {
-            //SEt Fail MEssage and Redirecs
-            $_SESSION['delete'] = "<div class='error'>Failed to Delete Category.</div>";
-            //Redirect to Manage Category
+            //Đặt thông báo lỗi và chuyển hướng
+            $_SESSION['delete'] = "<div class='error'>Lỗi khi xóa danh mục. Vui lòng kiểm tra lại!</div>";
+            //Chuyển hướng đến quản lý danh mục
             header('location:'.SITEURL.'admin/manage-category.php');
         }
-
- 
-
     }
     else
     {
-        //redirect to Manage Category Page
-        header('location:'.SITEURL.'admin/manage-category.php');
+    //chuyển hướng đến trang quản lý danh mục        
+    header('location:'.SITEURL.'admin/manage-category.php');
     }
 ?>

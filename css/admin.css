@@ -1,8 +1,4 @@
-/* 
-    Author: Vijay Thapa;
-    Theme: Food Order Website Admin;
-    Version: 1.0;
-*/
+/* CSS cho tất cả trong trang Admin*/
 
 *{
     margin: 0;
@@ -28,6 +24,7 @@
 .tbl-full{
     width: 100%;
 }
+
 .tbl-30{
     width: 30%;
 }
@@ -49,6 +46,7 @@ table tr td{
     text-decoration: none;
     font-weight: bold;
 }
+
 .btn-primary:hover{
     background-color: #3742fa;
 }
@@ -60,6 +58,15 @@ table tr td{
     text-decoration: none;
     font-weight: bold;
 }
+
+.btn-secondary_de{
+    background-color: #c01919;
+    padding: 1%;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .btn-secondary:hover{
     background-color: #2ed573;
 }
@@ -71,6 +78,7 @@ table tr td{
     text-decoration: none;
     font-weight: bold;
 }
+
 .btn-danger:hover{
     background-color: #ff4757;
 }
@@ -82,28 +90,31 @@ table tr td{
     color: #ff4757;
 }
 
-
-/* CSS for Menu */
+/* CSS cho menu */
 .menu{
     border-bottom: 1px solid grey;
 }
+
 .menu ul{
     list-style-type: none;
 }
+
 .menu ul li{
     display: inline;
     padding: 1%;
 }
+
 .menu ul li a{
     text-decoration: none;
     font-weight: bold;
     color: #ff6b81;
 }
+
 .menu ul li a:hover{
     color: #ff4757;
 }
 
-/* CSS for main-content */
+/* CSS cho nội dung chính */
 .main-content{
     background-color: #f1f2f6;
     padding: 3% 0;
@@ -117,17 +128,24 @@ table tr td{
     float: left;
 }
 
-
-/* CSS for Footer */
+/* CSS cho Footer */
 .footer{
     background-color: #ff4757;
     color: white;
 }
 
-/* CSS for Login */
+/* CSS cho đăng nhập */
 .login{
-    border: 1px solid grey;
-    width: 20%;
+    background-color: #cfe2f5;
+    border: 5px solid grey;
+    width: 30%;
     margin: 10% auto;
-    padding: 2%;
+    padding: 3%;
+    position: relative;
+}
+
+.login a{
+    position: absolute;
+    top: 0;
+    right: -1px;
 }

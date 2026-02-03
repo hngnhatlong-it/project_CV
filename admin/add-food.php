@@ -1,11 +1,11 @@
-<?php include('partials/menu.php'); ?>
-
+<?php
+ob_start(); //Bắt đầu bộ đệm đầu ra, dùng cho wamp
+include('partials/menu.php');
+?>
 <div class="main-content">
     <div class="wrapper">
-        <h1>Add Food</h1>
-
+        <h1>Thêm món ăn</h1>
         <br><br>
-
         <?php 
             if(isset($_SESSION['upload']))
             {
@@ -13,137 +13,108 @@
                 unset($_SESSION['upload']);
             }
         ?>
-
-        <form action="" method="POST" enctype="multipart/form-data">
-        
+        <form action="" method="POST" enctype="multipart/form-data">       
             <table class="tbl-30">
-
                 <tr>
-                    <td>Title: </td>
+                    <td>Tiêu đề: </td>
                     <td>
-                        <input type="text" name="title" placeholder="Title of the Food">
+                        <input type="text" name="title" placeholder="Tên món ăn ...">
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Description: </td>
+                    <td>Mô tả: </td>
                     <td>
-                        <textarea name="description" cols="30" rows="5" placeholder="Description of the Food."></textarea>
+                        <textarea name="description" cols="30" rows="5" placeholder="Mô tả về món ăn ..."></textarea>
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Price: </td>
+                    <td>Giá: </td>
                     <td>
                         <input type="number" name="price">
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Select Image: </td>
+                    <td>Chọn hình: </td>
                     <td>
                         <input type="file" name="image">
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Category: </td>
+                    <td>Danh mục: </td>
                     <td>
                         <select name="category">
-
                             <?php 
-                                //Create PHP Code to display categories from Database
-                                //1. CReate SQL to get all active categories from database
-                                $sql = "SELECT * FROM tbl_category WHERE active='Yes'";
-                                
-                                //Executing qUery
+                                //Tạo Mã PHP để hiển thị các danh mục từ cơ sở dữ liệu
+                                //1. Tạo SQL để lấy tất cả các danh mục đang hoạt động từ cơ sở dữ liệu
+                                $sql = "SELECT * FROM tbl_category WHERE active='Yes'";                                
+                                //Thực hiện truy vấn
                                 $res = mysqli_query($conn, $sql);
-
-                                //Count Rows to check whether we have categories or not
+                                //Tạo biến đếm để kiểm tra xem chúng ta có danh mục hay không
                                 $count = mysqli_num_rows($res);
-
-                                //IF count is greater than zero, we have categories else we donot have categories
+                                //Nếu biến đếm lớn hơn 0, chúng ta có các danh mục, nếu không thì chúng ta không có danh mục
                                 if($count>0)
                                 {
-                                    //WE have categories
+                                    //Có danh mục
                                     while($row=mysqli_fetch_assoc($res))
                                     {
-                                        //get the details of categories
+                                        //Lấy thông tin về chi tiết danh mục
                                         $id = $row['id'];
                                         $title = $row['title'];
-
                                         ?>
-
                                         <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-
                                         <?php
                                     }
                                 }
                                 else
                                 {
-                                    //WE do not have category
+                                    //Không có danh mục
                                     ?>
                                     <option value="0">No Category Found</option>
                                     <?php
-                                }
-                            
-
-                                //2. Display on Drpopdown
+                                } 
                             ?>
-
                         </select>
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Featured: </td>
+                    <td>Yêu thích: </td>
                     <td>
                         <input type="radio" name="featured" value="Yes"> Yes 
                         <input type="radio" name="featured" value="No"> No
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Active: </td>
+                    <td>Hoạt động: </td>
                     <td>
                         <input type="radio" name="active" value="Yes"> Yes 
                         <input type="radio" name="active" value="No"> No
                     </td>
                 </tr>
-
                 <tr>
                     <td colspan="2">
-                        <input type="submit" name="submit" value="Add Food" class="btn-secondary">
+                        <input type="submit" name="submit" value="Thêm món ăn" class="btn-secondary">
                     </td>
                 </tr>
-
             </table>
-
-        </form>
-
-        
+        </form>      
         <?php 
-
-            //CHeck whether the button is clicked or not
+            //Kiểm tra xem nút đã được nhấp hay chưa
             if(isset($_POST['submit']))
             {
-                //Add the Food in Database
-                //echo "Clicked";
-                
-                //1. Get the DAta from Form
+                //Thêm món ăn vào cơ sở dữ liệu và echo ra để thông báo      
+                //1. Lấy dữ liệu từ Form
                 $title = $_POST['title'];
                 $description = $_POST['description'];
                 $price = $_POST['price'];
                 $category = $_POST['category'];
-
-                //Check whether radion button for featured and active are checked or not
+                //Kiểm tra xem nút radio cho tính năng và hoạt động có được chọn hay không
                 if(isset($_POST['featured']))
                 {
                     $featured = $_POST['featured'];
                 }
                 else
                 {
-                    $featured = "No"; //SEtting the Default Value
+                    $featured = "No"; //Thiết lập giá trị mặc định
                 }
 
                 if(isset($_POST['active']))
@@ -152,62 +123,49 @@
                 }
                 else
                 {
-                    $active = "No"; //Setting Default Value
+                    $active = "No"; //TThiết lập giá trị mặc định
                 }
-
-                //2. Upload the Image if selected
-                //Check whether the select image is clicked or not and upload the image only if the image is selected
+                //2. Tải ảnh lên nếu đã chọn
                 if(isset($_FILES['image']['name']))
                 {
-                    //Get the details of the selected image
+                    //Nhận thông tin chi tiết của hình ảnh đã chọn
                     $image_name = $_FILES['image']['name'];
 
-                    //Check Whether the Image is Selected or not and upload image only if selected
+                    //Kiểm tra xem hình ảnh đã được chọn hay chưa và chỉ tải hình ảnh lên nếu đã chọn
                     if($image_name!="")
                     {
-                        // Image is SElected
-                        //A. REnamge the Image
-                        //Get the extension of selected image (jpg, png, gif, etc.) "vijay-thapa.jpg" vijay-thapa jpg
+                        //Hình ảnh đã được chọn
+                        //A. Đổi tên hình ảnh
                         $ext = end(explode('.', $image_name));
-
-                        // Create New Name for Image
-                        $image_name = "Food-Name-".rand(0000,9999).".".$ext; //New Image Name May Be "Food-Name-657.jpg"
-
-                        //B. Upload the Image
-                        //Get the Src Path and DEstinaton path
-
-                        // Source path is the current location of the image
+                        //Tạo tên mới cho hình ảnh
+                        $image_name = "Food-Name-".rand(0000,9999).".".$ext; 
+                        //B. Tải ảnh lên 
+                        //Lấy đường dẫn nguồn và đường dẫn đích
+                        //Đường dẫn nguồn là vị trí hiện tại của hình ảnh
                         $src = $_FILES['image']['tmp_name'];
-
-                        //Destination Path for the image to be uploaded
+                        //Đường dẫn đích để tải hình ảnh lên
                         $dst = "../images/food/".$image_name;
-
-                        //Finally Uppload the food image
+                        //Cuối cùng tải hình ảnh món ăn lên
                         $upload = move_uploaded_file($src, $dst);
-
-                        //check whether image uploaded of not
+                        //Kiểm tra xem hình ảnh đã được tải lên chưa
                         if($upload==false)
                         {
-                            //Failed to Upload the image
-                            //REdirect to Add Food Page with Error Message
-                            $_SESSION['upload'] = "<div class='error'>Failed to Upload Image.</div>";
+                            //Không tải được hình ảnh
+                            //Chuyển hướng đến trang thêm món ăn với thông báo lỗi
+                            $_SESSION['upload'] = "<div class='error'>Lỗi khi tải hình ảnh lên!</div>";
                             header('location:'.SITEURL.'admin/add-food.php');
-                            //STop the process
+                            //Kết thúc tiến trình
                             die();
                         }
-
                     }
-
                 }
                 else
                 {
-                    $image_name = ""; //SEtting DEfault Value as blank
+                    $image_name = ""; //Đặt giá trị mặc định là trống
                 }
-
-                //3. Insert Into Database
-
-                //Create a SQL Query to Save or Add food
-                // For Numerical we do not need to pass value inside quotes '' But for string value it is compulsory to add quotes ''
+                //3. Chèn vào cơ sở dữ liệu
+                //Tạo truy vấn SQL để lưu hoặc thêm món ăn
+                //Đối với số không cần truyền giá trị bên trong dấu ngoặc kép '' nhưng còn đối với giá trị chuỗi thì bắt buộc phải thêm dấu ngoặc kép ''
                 $sql2 = "INSERT INTO tbl_food SET 
                     title = '$title',
                     description = '$description',
@@ -217,32 +175,27 @@
                     featured = '$featured',
                     active = '$active'
                 ";
-
-                //Execute the Query
+                //Thực hiện truy vấn
                 $res2 = mysqli_query($conn, $sql2);
-
-                //CHeck whether data inserted or not
-                //4. Redirect with MEssage to Manage Food page
+                //Kiểm tra dữ liệu đã được chèn hay chưa
+                //4. Chuyển hướng bằng tin nhắn đến trang quản lý món ăn
                 if($res2 == true)
                 {
-                    //Data inserted Successfullly
-                    $_SESSION['add'] = "<div class='success'>Food Added Successfully.</div>";
+                    //Dữ liệu đã được chèn thành công
+                    $_SESSION['add'] = "<div class='success'>Thêm món ăn thành công!</div>";
                     header('location:'.SITEURL.'admin/manage-food.php');
                 }
                 else
                 {
-                    //FAiled to Insert Data
-                    $_SESSION['add'] = "<div class='error'>Failed to Add Food.</div>";
-                    header('location:'.SITEURL.'admin/manage-food.php');
-                }
-
-                
+                    //Không chèn được dữ liệu
+                    $_SESSION['add'] = "<div class='error'>Lỗi khi thêm món ăn. Vui lòng kiểm tra lại!</div>";
+                    //header('location:'.SITEURL.'admin/add-food.php');
+                }             
             }
-
         ?>
-
-
     </div>
 </div>
-
-<?php include('partials/footer.php'); ?>
+<?php
+include('partials/footer.php');
+ob_end_flush(); //Kết thúc bộ đệm
+?>

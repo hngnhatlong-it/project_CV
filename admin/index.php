@@ -1,10 +1,8 @@
-
 <?php include('partials/menu.php'); ?>
-
-        <!-- Main Content Section Starts -->
+        <!-- Bắt đầu nội dung chính -->
         <div class="main-content">
             <div class="wrapper">
-                <h1>Dashboard</h1>
+                <h1>Xin chào bạn, chúc bạn một ngày bán hàng hiệu quả.</h1>
                 <br><br>
                 <?php 
                     if(isset($_SESSION['login']))
@@ -14,82 +12,63 @@
                     }
                 ?>
                 <br><br>
-
                 <div class="col-4 text-center">
-
                     <?php 
-                        //Sql Query 
+                        //Truy vấn SQL
                         $sql = "SELECT * FROM tbl_category";
-                        //Execute Query
+                        //Thực hiện truy vấn
                         $res = mysqli_query($conn, $sql);
-                        //Count Rows
+                        //Tạo biến đếm
                         $count = mysqli_num_rows($res);
                     ?>
-
                     <h1><?php echo $count; ?></h1>
                     <br />
-                    Categories
+                    Các Danh mục
                 </div>
-
                 <div class="col-4 text-center">
-
                     <?php 
-                        //Sql Query 
+                        //Truy vấn SQL
                         $sql2 = "SELECT * FROM tbl_food";
-                        //Execute Query
+                        //Thực hiện truy vấn
                         $res2 = mysqli_query($conn, $sql2);
-                        //Count Rows
+                        //Tạo biến đếm
                         $count2 = mysqli_num_rows($res2);
                     ?>
-
                     <h1><?php echo $count2; ?></h1>
                     <br />
-                    Foods
+                    Thức ăn
                 </div>
-
                 <div class="col-4 text-center">
-                    
                     <?php 
-                        //Sql Query 
+                        //Truy vấn SQL
                         $sql3 = "SELECT * FROM tbl_order";
-                        //Execute Query
+                        //Thực hiện truy vấn
                         $res3 = mysqli_query($conn, $sql3);
-                        //Count Rows
+                        //Tạo biến đếm
                         $count3 = mysqli_num_rows($res3);
                     ?>
-
                     <h1><?php echo $count3; ?></h1>
                     <br />
-                    Total Orders
+                    Tổng đơn hàng
                 </div>
-
-                <div class="col-4 text-center">
-                    
+                <div class="col-4 text-center">               
                     <?php 
-                        //Creat SQL Query to Get Total Revenue Generated
-                        //Aggregate Function in SQL
+                        //Tạo truy vấn SQL để lấy tổng doanh thu được tạo ra 
+                        //Hàm tổng hợp trong SQL
                         $sql4 = "SELECT SUM(total) AS Total FROM tbl_order WHERE status='Delivered'";
-
-                        //Execute the Query
+                        //Thực hiện truy vấn
                         $res4 = mysqli_query($conn, $sql4);
-
-                        //Get the VAlue
-                        $row4 = mysqli_fetch_assoc($res4);
-                        
-                        //GEt the Total REvenue
+                        //Lấy giá trị
+                        $row4 = mysqli_fetch_assoc($res4);                      
+                        //Lấy tổng doanh thu
                         $total_revenue = $row4['Total'];
-
                     ?>
-
                     <h1>$<?php echo $total_revenue; ?></h1>
                     <br />
-                    Revenue Generated
+                    Doanh thu
                 </div>
-
                 <div class="clearfix"></div>
-
             </div>
         </div>
-        <!-- Main Content Setion Ends -->
-
+        <!-- Kết thúc nội dung chính -->
 <?php include('partials/footer.php') ?>

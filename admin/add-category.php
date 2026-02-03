@@ -1,13 +1,9 @@
 <?php include('partials/menu.php'); ?>
-
 <div class="main-content">
     <div class="wrapper">
-        <h1>Add Category</h1>
-
+        <h1>Thêm danh mục</h1>
         <br><br>
-
-        <?php 
-        
+        <?php       
             if(isset($_SESSION['add']))
             {
                 echo $_SESSION['add'];
@@ -18,79 +14,65 @@
             {
                 echo $_SESSION['upload'];
                 unset($_SESSION['upload']);
-            }
-        
+            }       
         ?>
-
         <br><br>
-
-        <!-- Add CAtegory Form Starts -->
+        <!-- Bắt đầu form thêm danh mục -->
         <form action="" method="POST" enctype="multipart/form-data">
-
             <table class="tbl-30">
                 <tr>
-                    <td>Title: </td>
+                    <td>Tiêu đề: </td>
                     <td>
-                        <input type="text" name="title" placeholder="Category Title">
+                        <input type="text" name="title" placeholder="Tên danh mục ...">
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Select Image: </td>
+                    <td>Chọn Hình: </td>
                     <td>
                         <input type="file" name="image">
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Featured: </td>
+                    <td>Yêu thích: </td>
                     <td>
                         <input type="radio" name="featured" value="Yes"> Yes 
                         <input type="radio" name="featured" value="No"> No 
                     </td>
                 </tr>
-
                 <tr>
-                    <td>Active: </td>
+                    <td>Hoạt động: </td>
                     <td>
                         <input type="radio" name="active" value="Yes"> Yes 
                         <input type="radio" name="active" value="No"> No 
                     </td>
                 </tr>
-
                 <tr>
                     <td colspan="2">
-                        <input type="submit" name="submit" value="Add Category" class="btn-secondary">
+                        <input type="submit" name="submit" value="Thêm danh mục" class="btn-secondary">
                     </td>
                 </tr>
-
             </table>
-
         </form>
-        <!-- Add CAtegory Form Ends -->
-
+        <!-- Kết thúc form thêm danh mục -->
         <?php 
-        
-            //CHeck whether the Submit Button is Clicked or Not
+        //Kiểm tra xem nút Gửi đã được nhấp hay chưa
             if(isset($_POST['submit']))
             {
-                //echo "Clicked";
+                //xuất ra echo "đã nhấp"
 
-                //1. Get the Value from CAtegory Form
+                //1. Lấy giá trị từ biểu mẫu danh mục
                 $title = $_POST['title'];
-
-                //For Radio input, we need to check whether the button is selected or not
+                //Đối với đầu vào Radio thì cần kiểm tra xem nút có được chọn hay không
                 if(isset($_POST['featured']))
                 {
-                    //Get the VAlue from form
+                    //Lấy giá trị từ form
                     $featured = $_POST['featured'];
                 }
                 else
                 {
-                    //SEt the Default VAlue
+                    //Đặt giá trị mặc định
                     $featured = "No";
                 }
-
                 if(isset($_POST['active']))
                 {
                     $active = $_POST['active'];
@@ -99,88 +81,71 @@
                 {
                     $active = "No";
                 }
-
-                //Check whether the image is selected or not and set the value for image name accoridingly
+                //Kiểm tra xem hình ảnh có được chọn hay không và đặt giá trị cho tên hình ảnh theo đó
                 //print_r($_FILES['image']);
-
-                //die();//Break the Code Here
-
                 if(isset($_FILES['image']['name']))
                 {
-                    //Upload the Image
-                    //To upload image we need image name, source path and destination path
-                    $image_name = $_FILES['image']['name'];
-                    
-                    // Upload the Image only if image is selected
+                    //Tải ảnh lên
+                    //Để tải ảnh lên, chúng ta cần tên ảnh, đường dẫn nguồn và đường dẫn đích
+                    $image_name = $_FILES['image']['name'];    
+                    //Chỉ tải hình ảnh lên nếu hình ảnh được chọn
                     if($image_name != "")
                     {
-
-                        //Auto Rename our Image
-                        //Get the Extension of our image (jpg, png, gif, etc) e.g. "specialfood1.jpg"
+                        //Tự động đổi tên hình ảnh
                         $ext = end(explode('.', $image_name));
-
-                        //Rename the Image
-                        $image_name = "Food_Category_".rand(000, 999).'.'.$ext; // e.g. Food_Category_834.jpg
-                        
-
+                        //Đổi tên ảnh
+                        $image_name = "Food_Category_".rand(000, 999).'.'.$ext; 
+  
                         $source_path = $_FILES['image']['tmp_name'];
 
                         $destination_path = "../images/category/".$image_name;
 
-                        //Finally Upload the Image
+                        //Cuối cùng tải ảnh lên
                         $upload = move_uploaded_file($source_path, $destination_path);
 
-                        //Check whether the image is uploaded or not
-                        //And if the image is not uploaded then we will stop the process and redirect with error message
+                        // //Kiểm tra xem hình ảnh đã được tải lên hay chưa và nếu hình ảnh chưa được tải lên thì sẽ dừng quá trình và chuyển hướng với thông báo lỗi
                         if($upload==false)
                         {
-                            //SEt message
-                            $_SESSION['upload'] = "<div class='error'>Failed to Upload Image. </div>";
-                            //Redirect to Add CAtegory Page
+                            //Đặt tin nhắn
+                            $_SESSION['upload'] = "<div class='error'>Lỗi khi tải hình ảnh!</div>";
+                            //Chuyển hướng đến thêm trang danh mục
                             header('location:'.SITEURL.'admin/add-category.php');
-                            //STop the Process
+                            //Dừng quá trình
                             die();
                         }
-
                     }
                 }
                 else
                 {
-                    //Don't Upload Image and set the image_name value as blank
+                    //Không tải hình ảnh lên và đặt giá trị image_name thành trống
                     $image_name="";
                 }
-
-                //2. Create SQL Query to Insert CAtegory into Database
+                //2. Tạo truy vấn SQL để chèn danh mục vào cơ sở dữ liệu
                 $sql = "INSERT INTO tbl_category SET 
                     title='$title',
                     image_name='$image_name',
                     featured='$featured',
                     active='$active'
                 ";
-
-                //3. Execute the Query and Save in Database
+                //3. Thực hiện truy vấn và lưu vào cơ sở dữ liệu
                 $res = mysqli_query($conn, $sql);
-
-                //4. Check whether the query executed or not and data added or not
+                //4. Kiểm tra xem truy vấn có được thực hiện hay không và dữ liệu có được thêm vào hay không
                 if($res==true)
                 {
-                    //Query Executed and Category Added
-                    $_SESSION['add'] = "<div class='success'>Category Added Successfully.</div>";
-                    //Redirect to Manage Category Page
+                    //Truy vấn được thực hiện và danh mục được thêm vào
+                    $_SESSION['add'] = "<div class='success'>Thêm danh mục thành công!</div>";
+                    //Chuyển hướng đến trang quản lý danh mục
                     header('location:'.SITEURL.'admin/manage-category.php');
                 }
                 else
                 {
-                    //Failed to Add CAtegory
-                    $_SESSION['add'] = "<div class='error'>Failed to Add Category.</div>";
-                    //Redirect to Manage Category Page
+                    //Lỗi khi thêm danh mục
+                    $_SESSION['add'] = "<div class='error'>Lỗi khi thêm danh mục. Vui lòng kiểm tra lại!</div>";
+                    //Chuyển hướng đến trang quản lý danh mục
                     header('location:'.SITEURL.'admin/add-category.php');
                 }
             }
-        
         ?>
-
     </div>
 </div>
-
 <?php include('partials/footer.php'); ?>

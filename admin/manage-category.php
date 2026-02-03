@@ -1,91 +1,72 @@
 <?php include('partials/menu.php'); ?>
-
 <div class="main-content">
     <div class="wrapper">
-        <h1>Manage Category</h1>
-
+        <h1>Quản lý danh mục</h1>
         <br /><br />
-        <?php 
-        
+        <?php       
             if(isset($_SESSION['add']))
             {
                 echo $_SESSION['add'];
                 unset($_SESSION['add']);
             }
-
             if(isset($_SESSION['remove']))
             {
                 echo $_SESSION['remove'];
                 unset($_SESSION['remove']);
             }
-
             if(isset($_SESSION['delete']))
             {
                 echo $_SESSION['delete'];
                 unset($_SESSION['delete']);
             }
-
             if(isset($_SESSION['no-category-found']))
             {
                 echo $_SESSION['no-category-found'];
                 unset($_SESSION['no-category-found']);
             }
-
             if(isset($_SESSION['update']))
             {
                 echo $_SESSION['update'];
                 unset($_SESSION['update']);
             }
-
             if(isset($_SESSION['upload']))
             {
                 echo $_SESSION['upload'];
                 unset($_SESSION['upload']);
             }
-
             if(isset($_SESSION['failed-remove']))
             {
                 echo $_SESSION['failed-remove'];
                 unset($_SESSION['failed-remove']);
-            }
-        
+            }      
         ?>
         <br><br>
-
-                <!-- Button to Add Admin -->
-                <a href="<?php echo SITEURL; ?>admin/add-category.php" class="btn-primary">Add Category</a>
-
+                <!-- Nút thêm danh mục -->
+                <a href="<?php echo SITEURL; ?>admin/add-category.php" class="btn-primary">Thêm danh mục</a>
                 <br /><br /><br />
-
                 <table class="tbl-full">
                     <tr>
-                        <th>S.N.</th>
-                        <th>Title</th>
-                        <th>Image</th>
-                        <th>Featured</th>
-                        <th>Active</th>
-                        <th>Actions</th>
+                        <th>ID</th>
+                        <th>Tiêu đề</th>
+                        <th>Hình ảnh</th>
+                        <th>Yêu thích</th>
+                        <th>Hoạt động</th>
+                        <th>Trạng thái</th>
                     </tr>
-
                     <?php 
-
-                        //Query to Get all CAtegories from Database
+                        //Truy vấn để lấy tất cả các loại từ cơ sở dữ liệu
                         $sql = "SELECT * FROM tbl_category";
-
-                        //Execute Query
+                        //Thực hiện truy vấn
                         $res = mysqli_query($conn, $sql);
-
-                        //Count Rows
+                        //Tạo biến đếm
                         $count = mysqli_num_rows($res);
-
-                        //Create Serial Number Variable and assign value as 1
+                        //Tạo biến và gán giá trị là 1
                         $sn=1;
-
-                        //Check whether we have data in database or not
+                        //Kiểm tra xem chúng ta có dữ liệu trong cơ sở dữ liệu hay không
                         if($count>0)
                         {
-                            //We have data in database
-                            //get the data and display
+                            //Có dữ liệu trong cơ sở dữ liệu
+                            //Lấy dữ liệu và hiển thị
                             while($row=mysqli_fetch_assoc($res))
                             {
                                 $id = $row['id'];
@@ -93,68 +74,49 @@
                                 $image_name = $row['image_name'];
                                 $featured = $row['featured'];
                                 $active = $row['active'];
-
                                 ?>
-
                                     <tr>
                                         <td><?php echo $sn++; ?>. </td>
                                         <td><?php echo $title; ?></td>
-
                                         <td>
-
                                             <?php  
-                                                //Chcek whether image name is available or not
+                                                //Kiểm tra xem tên hình ảnh có sẵn hay không
                                                 if($image_name!="")
                                                 {
-                                                    //Display the Image
-                                                    ?>
-                                                    
-                                                    <img src="<?php echo SITEURL; ?>images/category/<?php echo $image_name; ?>" width="100px" >
-                                                    
+                                                    //Hiển thị hình ảnh
+                                                    ?>                              
+                                                    <img src="<?php echo SITEURL; ?>images/category/<?php echo $image_name; ?>" width="100px" >                                                  
                                                     <?php
                                                 }
                                                 else
                                                 {
-                                                    //DIsplay the MEssage
-                                                    echo "<div class='error'>Image not Added.</div>";
+                                                    //Hiển thị tin nhắn
+                                                    echo "<div class='error'>Chưa thêm hình ảnh!</div>";
                                                 }
                                             ?>
-
                                         </td>
-
                                         <td><?php echo $featured; ?></td>
                                         <td><?php echo $active; ?></td>
                                         <td>
-                                            <a href="<?php echo SITEURL; ?>admin/update-category.php?id=<?php echo $id; ?>" class="btn-secondary">Update Category</a>
-                                            <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id; ?>&image_name=<?php echo $image_name; ?>" class="btn-danger">Delete Category</a>
+                                            <a href="<?php echo SITEURL; ?>admin/update-category.php?id=<?php echo $id; ?>" class="btn-secondary">Cập nhật</a>
+                                            <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id; ?>&image_name=<?php echo $image_name; ?>" class="btn-danger">Xóa</a>
                                         </td>
                                     </tr>
-
                                 <?php
-
                             }
                         }
                         else
                         {
-                            //WE do not have data
-                            //We'll display the message inside table
+                            //Không có data
+                            //Hiển thị tin nhắn thông báo
                             ?>
-
                             <tr>
-                                <td colspan="6"><div class="error">No Category Added.</div></td>
+                                <td colspan="6"><div class="error">Không thêm được danh mục. Vui lòng kiểm tra lại!</div></td>
                             </tr>
-
                             <?php
                         }
-                    
                     ?>
-
-                    
-
-                    
                 </table>
-    </div>
-    
+    </div>   
 </div>
-
 <?php include('partials/footer.php'); ?>

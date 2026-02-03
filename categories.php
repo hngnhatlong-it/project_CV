@@ -1,32 +1,22 @@
-
 <?php include('partials-front/menu.php'); ?>
-
-
-
-    <!-- CAtegories Section Starts Here -->
+    <!-- Bắt đầu phần danh mục -->
     <section class="categories">
         <div class="container">
-            <h2 class="text-center">Explore Foods</h2>
-
+            <h2 class="text-center">Khám phá danh mục món ăn</h2>
             <?php 
-
-                //Display all the cateories that are active
-                //Sql Query
+                //Hiển thị tất cả các danh mục có trong trang web
                 $sql = "SELECT * FROM tbl_category WHERE active='Yes'";
-
-                //Execute the Query
+                //Thực hiện truy vấn
                 $res = mysqli_query($conn, $sql);
-
-                //Count Rows
+                //Biến đếm
                 $count = mysqli_num_rows($res);
-
-                //CHeck whether categories available or not
+                //Kiểm tra xem danh mục có sẵn hay không
                 if($count>0)
                 {
-                    //CAtegories Available
+                    //Danh mục có sẵn
                     while($row=mysqli_fetch_assoc($res))
                     {
-                        //Get the Values
+                        //Lấy giá trị
                         $id = $row['id'];
                         $title = $row['title'];
                         $image_name = $row['image_name'];
@@ -37,19 +27,17 @@
                                 <?php 
                                     if($image_name=="")
                                     {
-                                        //Image not Available
-                                        echo "<div class='error'>Image not found.</div>";
+                                        //Hình ảnh không có sẵn
+                                        echo "<div class='error'>Hình ảnh không có sẵn!</div>";
                                     }
                                     else
                                     {
-                                        //Image Available
+                                        //Hình ảnh có sẵn
                                         ?>
                                         <img src="<?php echo SITEURL; ?>images/category/<?php echo $image_name; ?>" alt="Pizza" class="img-responsive img-curve">
                                         <?php
                                     }
                                 ?>
-                                
-
                                 <h3 class="float-text text-white"><?php echo $title; ?></h3>
                             </div>
                         </a>
@@ -59,17 +47,12 @@
                 }
                 else
                 {
-                    //CAtegories Not Available
-                    echo "<div class='error'>Category not found.</div>";
-                }
-            
+                    //Danh mục không tồn tại
+                    echo "<div class='error'>Danh mục chưa tồn tại!</div>";
+                }           
             ?>
-            
-
             <div class="clearfix"></div>
         </div>
     </section>
-    <!-- Categories Section Ends Here -->
-
-
+    <!-- Kết thúc -->
     <?php include('partials-front/footer.php'); ?>

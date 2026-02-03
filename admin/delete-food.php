@@ -1,71 +1,53 @@
 <?php 
-    //Include COnstants Page
+    //Bao gồm file constants
     include('../config/constants.php');
-
-    //echo "Delete Food Page";
-
-    if(isset($_GET['id']) && isset($_GET['image_name'])) //Either use '&&' or 'AND'
-    {
-        //Process to Delete
-        //echo "Process to Delete";
-
-        //1.  Get ID and Image NAme
+    if(isset($_GET['id']) && isset($_GET['image_name'])) //Sử dụng '&&' hoặc 'AND'
+    { 
+        //1.  Lấy ID và tên ảnh
         $id = $_GET['id'];
         $image_name = $_GET['image_name'];
-
-        //2. Remove the Image if Available
-        //CHeck whether the image is available or not and Delete only if available
+        //2. Kiểm tra xem hình ảnh có sẵn hay không và chỉ xóa nếu có
         if($image_name != "")
         {
-            // IT has image and need to remove from folder
-            //Get the Image Path
+           // Nó có hình ảnh và cần xóa khỏi thư mục
+           // Lấy đường dẫn hình ảnh       
             $path = "../images/food/".$image_name;
-
-            //REmove Image File from Folder
+            //Xóa tệp hình ảnh khỏi thư mục
             $remove = unlink($path);
-
-            //Check whether the image is removed or not
+            //Kiểm tra xem hình ảnh đã được xóa hay chưa
             if($remove==false)
             {
-                //Failed to Remove image
-                $_SESSION['upload'] = "<div class='error'>Failed to Remove Image File.</div>";
-                //REdirect to Manage Food
+                //Lỗi khi xóa ảnh
+                $_SESSION['upload'] = "<div class='error'>Lỗi khi xóa file hình ảnh. Vui lòng kiểm tra lại!</div>";
+                //Chuyển hướng đến quản lý món ăn
                 header('location:'.SITEURL.'admin/manage-food.php');
-                //Stop the Process of Deleting Food
+                //Dừng tiến trình
                 die();
             }
-
         }
-
-        //3. Delete Food from Database
+        //3. Xóa món ăn ra khỏi Database
         $sql = "DELETE FROM tbl_food WHERE id=$id";
-        //Execute the Query
+        //Thực hiện truy vấn
         $res = mysqli_query($conn, $sql);
-
-        //CHeck whether the query executed or not and set the session message respectively
-        //4. Redirect to Manage Food with Session Message
+        //Kiểm tra xem truy vấn có được thực hiện hay không và đặt thông báo
+        //4. Chuyển hướng đến Quản lý thực phẩm với Session
         if($res==true)
         {
-            //Food Deleted
-            $_SESSION['delete'] = "<div class='success'>Food Deleted Successfully.</div>";\
+            //Xóa món ăn
+            $_SESSION['delete'] = "<div class='success'>Xóa món ăn thành công!</div>";
             header('location:'.SITEURL.'admin/manage-food.php');
         }
         else
         {
-            //Failed to Delete Food
-            $_SESSION['delete'] = "<div class='error'>Failed to Delete Food.</div>";\
+            //Lỗi khi xóa món ăn
+            $_SESSION['delete'] = "<div class='error'>Lỗi khi xóa món ăn. Vui lòng kiểm tra lại!</div>";
             header('location:'.SITEURL.'admin/manage-food.php');
         }
-
-        
-
     }
     else
     {
-        //Redirect to Manage Food Page
-        //echo "REdirect";
+        //Chuyển hướng đến trang quản lý món ăn
         $_SESSION['unauthorize'] = "<div class='error'>Unauthorized Access.</div>";
         header('location:'.SITEURL.'admin/manage-food.php');
     }
-
 ?>
